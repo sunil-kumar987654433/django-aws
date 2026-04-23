@@ -34,10 +34,13 @@ DEFAULT_APPS = [
 LOCAL_APP = [
     'todo', 
     'account',
+    'product',
 ]
 
 THIRD_APP = [
     "rest_framework",
+    'drf_yasg',
+    'django_extensions',
 ]
 
 INSTALLED_APPS = DEFAULT_APPS + THIRD_APP + LOCAL_APP
@@ -135,8 +138,17 @@ AWS_SECRET_ACCESS_KEY = os.environ.get("AWS_SECRET_KEY")
 AWS_STORAGE_BUCKET_NAME= os.environ.get("AWS_STORAGE_BUCKET_NAME")
 AWS_S3_REGION_NAME= os.environ.get("AWS_S3_REGION_NAME")
 AWS_S3_FILE_OVERWRITE=False
-AWS_QUERYSTRING_AUTH = False
 
+# file and image only show in project not in private
+# AWS_QUERYSTRING_AUTH = True
+AWS_DEFAULT_ACL = None
+AWS_QUERYSTRING_EXPIRE=3600
+
+
+
+
+
+# settings.py
 
 STORAGES = {
     "default": {
@@ -145,7 +157,9 @@ STORAGES = {
             "bucket_name": AWS_STORAGE_BUCKET_NAME,
             "region_name": AWS_S3_REGION_NAME,
             "location": "media",
-            "default_acl": None,  # important (ACL disabled case)
+            "querystring_auth": True,        # YEH SABSE ZAROORI HAI: Isse temporary links banenge
+            "querystring_expire": 3600,     # Link 1 ghante tak valid rahega
+            "default_acl": None,
         },
     },
     "staticfiles": {
@@ -153,15 +167,26 @@ STORAGES = {
         "OPTIONS": {
             "bucket_name": AWS_STORAGE_BUCKET_NAME,
             "region_name": AWS_S3_REGION_NAME,
-            "location": "static",  # static folder in S3
-            "default_acl": None,
+            "location": "static",
+            "querystring_auth": False,       # CSS/JS ko public rehne dein taaki fast load ho
         },
     },
 }
 
 
 
+
+
+
+
 AWS_S3_CUSTOM_DOMAIN = f"{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com"
 
-MEDIA_URL = f"https://{AWS_S3_CUSTOM_DOMAIN}/media/"
+# MEDIA_URL = f"https://{AWS_S3_CUSTOM_DOMAIN}/media/"
 STATIC_URL = f"https://{AWS_S3_CUSTOM_DOMAIN}/static/"
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.BasicAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+    ]
+}
