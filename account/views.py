@@ -3,11 +3,16 @@ from django.views import View
 from account.models import User
 from django.contrib import messages
 # Create your views here.
+from product.models import Product
+
 
 
 class RegisterUserViewSet(View):
     def get(self, request):
-        context = {}
+        
+        context = {
+            "products": Product.objects.all()
+        }
         return render(request, template_name="website/account/create-user.html", context=context)
     
 
@@ -26,7 +31,6 @@ class RegisterUserViewSet(View):
 
 
         context = {}
-        print(data)
         try:
             User.objects.create_user(email=email, password=password)
             

@@ -34,10 +34,13 @@ DEFAULT_APPS = [
 LOCAL_APP = [
     'todo', 
     'account',
+    'product',
 ]
 
 THIRD_APP = [
     "rest_framework",
+    'drf_yasg',
+    'django_extensions',
 ]
 
 INSTALLED_APPS = DEFAULT_APPS + THIRD_APP + LOCAL_APP
@@ -135,7 +138,12 @@ AWS_SECRET_ACCESS_KEY = os.environ.get("AWS_SECRET_KEY")
 AWS_STORAGE_BUCKET_NAME= os.environ.get("AWS_STORAGE_BUCKET_NAME")
 AWS_S3_REGION_NAME= os.environ.get("AWS_S3_REGION_NAME")
 AWS_S3_FILE_OVERWRITE=False
-AWS_QUERYSTRING_AUTH = False
+
+# file and image only show in project not in private
+AWS_QUERYSTRING_AUTH = True
+AWS_DEFAULT_ACL = None
+AWS_QUERYSTRING_EXPIRE=3600
+
 
 
 STORAGES = {
@@ -165,3 +173,10 @@ AWS_S3_CUSTOM_DOMAIN = f"{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com"
 
 MEDIA_URL = f"https://{AWS_S3_CUSTOM_DOMAIN}/media/"
 STATIC_URL = f"https://{AWS_S3_CUSTOM_DOMAIN}/static/"
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.BasicAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+    ]
+}

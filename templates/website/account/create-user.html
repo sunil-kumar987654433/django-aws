@@ -51,7 +51,15 @@
     </div>
   </div>
 </div>
+
+<div>
+  {% for product in products%}
+  
+  <img src="{{product.product_image.url}}" alt="product image">
+  {% endfor %}
+</div>
 {% endblock %}
 {% block js %}
     <script src="{% static 'website/js/create-user.js' %}"></script>
+    
 {% endblock %}
