@@ -1,0 +1,23 @@
+version: '3.9'
+
+services:
+  web_app:
+    build: .
+    volumes:
+      - .:/django_app
+    ports:
+      - "8000:8000"
+    image: app:django
+    container_name: django_cont
+    expose:
+      - 8000
+
+  nginx:
+    build: ./nginx
+    image: nginx:latest
+    container_name: nginx_cont
+    ports:
+      - "80:80"
+    depends_on:
+      - web_app
+

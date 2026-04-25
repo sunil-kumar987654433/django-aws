@@ -4,7 +4,7 @@ FROM python:3.12.13-slim AS builder
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
 
-WORKDIR /app
+WORKDIR /django_app
 
 RUN apt-get update && apt-get install -y build-essential
 
@@ -20,7 +20,7 @@ FROM python:3.12.13-slim
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
 
-WORKDIR /app
+WORKDIR /django_app
 
 # Create non-root user
 RUN adduser --disabled-password --no-create-home appuser
@@ -32,7 +32,7 @@ COPY --from=builder /install /usr/local
 COPY . .
 
 # Change ownership
-RUN chown -R appuser:appuser /app
+RUN chown -R appuser:appuser /django_app
 
 # Copy entrypoint
 COPY entrypoint.sh /entrypoint.sh
